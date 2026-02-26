@@ -46,12 +46,54 @@
  */
 export function createDialogueWriter(genre) {
   // Your code here
+  const genres = ["action", "romance", "comedy", "drama"]
+  if (!genre || !genres.includes(genre)) return null;
+  
+  function template(h, v) {
+    if (!h || !v) return "...";
+    
+    // Could use object keys for faster lookup
+    const dialogues = {
+      action: (h, v) => `${h} says: 'Tujhe toh main dekh lunga, ${v}!'`,
+      romance: (h, v) => `${h} whispers: '${v}, tum mere liye sab kuch ho'`,
+      comedy: (h, v) => `${h} laughs: '${v} bhai, kya kar rahe ho yaar!'`,
+      drama: (h, v) => `${h} cries: '${v}, tune mera sab kuch cheen liya!'`
+    };
+
+    const dialogueFn = dialogues[genre];
+    return dialogueFn(h,v)
+  }
+  return template;
 }
 
 export function createTicketPricer(basePrice) {
   // Your code here
+  if(!basePrice || basePrice < 0) return null
+  function ticket(seatType, isWeekend = false){
+    const  seats = {
+      silver: 1,
+      gold: 1.5,
+      platinum: 2
+    }
+    if (!(seatType in seats)) return null
+    let price = basePrice * seats[seatType] 
+    if (isWeekend) price *= 1.3
+    return Math.round(price)
+  }
+  return ticket
 }
 
 export function createRatingCalculator(weights) {
   // Your code here
+  if(!weights || typeof weights !== 'object') return null
+  function score(scores) {
+    let result = 0;
+    for (const key in weights) {
+      result += (weights[key] || 0) * (scores[key] || 0);
+    }
+    return Number(result.toFixed(1));
+  }
+  return score
 }
+
+

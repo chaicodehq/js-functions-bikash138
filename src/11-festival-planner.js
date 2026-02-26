@@ -50,4 +50,53 @@
  */
 export function createFestivalManager() {
   // Your code here
+
+  let festivals = []
+
+  const addFestival = (name, date, type) => {
+    if(!name || typeof name !== 'string') return -1
+    if(typeof date !== 'string') return -1
+    const validTypes = ["religious", "national", "cultural"]
+    if(!validTypes.includes(type)) return -1
+    const alreadyExists = festivals.some((f) => f.name === name);
+    if (alreadyExists) return -1
+
+    festivals.push({name, date, type})
+
+    return festivals.length
+  }
+
+  const removeFestival = (name) => {
+    const index = festivals.findIndex((f) => f.name === name)
+    if(index === -1) return false
+    festivals.splice(index, 1)
+    return true
+  }
+
+  const getAll = () => {
+    return [...festivals]
+  }
+
+  const getByType = (type) => {
+    return festivals.filter((f) => f.type === type)
+  }
+
+  const getUpcoming = (currentDate, n = 3) => {
+    const res = festivals.filter((f) => f.date >= currentDate)
+    res.sort((a,b) => a.date.localeCompare(b.date))
+    return res.slice(0, n)
+  }
+
+  const getCount = () => {
+    return festivals.length
+  }
+
+  return {
+    addFestival,
+    removeFestival,
+    getAll,
+    getByType,
+    getUpcoming,
+    getCount,
+  }
 }

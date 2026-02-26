@@ -39,14 +39,64 @@
  *   combinePlans(plan1, plan2, plan3)
  *   // => { totalCustomers: 3, totalRevenue: 7200, mealBreakdown: { veg: 2, nonveg: 1 } }
  */
+
+const mealTypes = ["veg", "nonveg", "jain"]
+
 export function createTiffinPlan({ name, mealType = "veg", days = 30 } = {}) {
   // Your code here
+  if(!mealTypes.includes(mealType) || !name) return null
+  const rates = {
+    "veg": 80,
+    "nonveg": 120,
+    "jain": 90
+  }
+  const dailyRate = rates[mealType]
+  const totalCost = days*dailyRate
+
+  const response = {
+    name,
+    mealType,
+    days,
+    dailyRate,
+    totalCost
+  }
+  return response
 }
 
 export function combinePlans(...plans) {
   // Your code here
+  if (plans.length === 0) return null
+  let totalRevenue = 0
+  let vegCount = 0
+  let nonvegCount = 0
+  let jainCount = 0
+  const totalCustomers = plans.length
+  plans.forEach((plan) => {
+    totalRevenue += plan.totalCost
+    if(plan.mealType === "veg") vegCount++
+    if(plan.mealType === "nonveg") nonvegCount++
+    if(plan.mealType === "jain") jainCount++
+  })
+  const response = {
+    totalCustomers,
+    totalRevenue,
+    mealBreakdown: {
+      veg: vegCount,
+      nonveg: nonvegCount,
+      jain: jainCount
+    }
+  }
+  return response
 }
 
 export function applyAddons(plan, ...addons) {
   // Your code here
+  if (!plan) return null
+  let dailyrate = plan.dailyRate
+  addons.forEach((addon) => {
+    dailyrate += addon.price
+  })
+  const totalcost = dailyrate*plan.days
+  const updated = {...plan, addonNames: addons.map(addon => addon.name), dailyRate: dailyrate, totalCost: totalcost}
+  return updated
 }

@@ -54,14 +54,30 @@
  */
 export function repeatChar(char, n) {
   // Your code here
+  if(typeof char !== 'string' || char.length === 0 ) return ""
+  if(n <= 0) return ""
+  return char + repeatChar(char, n - 1)
 }
 
 export function sumNestedArray(arr) {
   // Your code here
+  if(!Array.isArray(arr)) return 0
+  if(arr.length === 0) return 0
+  let lastElmenet = arr[arr.length - 1]
+  arr.pop()
+  if(Array.isArray(lastElmenet)) return sumNestedArray(lastElmenet) + sumNestedArray(arr) //if lastElement is an array then last element and remaining elment needs to be addedd
+  if(typeof lastElmenet !== 'number') return sumNestedArray(arr) //Skipts the non number
+  return lastElmenet + sumNestedArray(arr)
 }
 
 export function flattenArray(arr) {
   // Your code here
+  if(!Array.isArray(arr)) return []
+  if(arr.length === 0) return []
+  let lastElmenet = arr[arr.length - 1]
+  arr.pop()
+  if(Array.isArray(lastElmenet)) return [...flattenArray(lastElmenet),  ...flattenArray(arr)]  //if lastElement is an array then last element and remaining elment needs to be addedd
+  return [lastElmenet, ...flattenArray(arr)]
 }
 
 export function isPalindrome(str) {
