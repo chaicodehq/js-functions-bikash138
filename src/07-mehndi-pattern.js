@@ -76,14 +76,41 @@ export function flattenArray(arr) {
   if(arr.length === 0) return []
   let lastElmenet = arr[arr.length - 1]
   arr.pop()
-  if(Array.isArray(lastElmenet)) return [...flattenArray(lastElmenet),  ...flattenArray(arr)]  //if lastElement is an array then last element and remaining elment needs to be addedd
-  return [lastElmenet, ...flattenArray(arr)]
+  if(Array.isArray(lastElmenet)) return [...flattenArray(arr), ...flattenArray(lastElmenet)]  //if lastElement is an array then last element and remaining elment needs to be addedd
+  return [...flattenArray(arr), lastElmenet]
 }
 
 export function isPalindrome(str) {
   // Your code here
+  if(typeof str !== 'string') return false
+  const strLower = str.toLowerCase()
+  const r = (str, left, right) => {
+    if(left >= right) return true
+
+    if(str[left] != str[right]) return false
+
+    return r(str, left+1, right-1)
+  }
+
+  return r(strLower, 0, str.length-1)
 }
 
 export function generatePattern(n) {
   // Your code here
+  if(n <= 0 || !Number.isInteger(n)) return []
+
+  if(n === 1) return ["*"]
+
+  const build = (currentLayer) => {
+    if(currentLayer === n ) return [repeatChar("*", n)]
+
+    const starString = repeatChar("*", currentLayer)
+
+    const insideLayer = build(currentLayer + 1)
+
+    return [starString, ...insideLayer, starString]
+  }
+
+  return build(1)
+
 }
